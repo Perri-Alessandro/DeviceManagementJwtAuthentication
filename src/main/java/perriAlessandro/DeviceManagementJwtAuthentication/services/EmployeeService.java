@@ -58,6 +58,7 @@ public class EmployeeService {
         found.setSurname(updateEmployee.getSurname());
         found.setEmail(updateEmployee.getEmail());
         found.setImageUrl(updateEmployee.getImageUrl());
+        found.setPassword(updateEmployee.getPassword());
         found.setDeviceList(updateEmployee.getDeviceList());
         return employeesDAO.save(found);
     }
