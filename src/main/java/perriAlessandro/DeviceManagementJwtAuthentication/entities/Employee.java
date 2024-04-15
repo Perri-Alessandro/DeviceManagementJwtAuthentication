@@ -31,13 +31,13 @@ public class Employee {
     @JsonManagedReference
     private List<Device> deviceList;
 
-    public Employee(String username, String name, String surname, String email, String imageUrl, String password) {
+    public Employee(String username, String name, String surname, String email, String password, String imageUrl) {
         this.username = username;
         this.name = name;
         this.surname = surname;
         this.email = email;
-        this.imageUrl = imageUrl;
         this.password = password;
+        this.imageUrl = imageUrl;
     }
 
     public void setDefaultImageUrl(String imageUrl) {
