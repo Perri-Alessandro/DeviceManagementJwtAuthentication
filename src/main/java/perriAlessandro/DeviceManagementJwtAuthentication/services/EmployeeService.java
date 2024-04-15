@@ -40,7 +40,7 @@ public class EmployeeService {
         if (employeesDAO.findByEmail(body.email()).isPresent()) {
             throw new BadRequestException("L'email " + body.email() + " è già in uso!");
         }
-        Employee newUser = new Employee(body.username(), body.name(), body.surname(), body.email(),
+        Employee newUser = new Employee(body.username(), body.name(), body.surname(), body.email(), body.password(),
                 "https://ui-avatars.com/api/?name=" + body.name() + "+" + body.surname());
 
         // 4. Salvo lo user
@@ -73,6 +73,10 @@ public class EmployeeService {
         employee.setImageUrl(newImageUrl);
         employeesDAO.save(employee);
         return newImageUrl;
+    }
+
+    public Employee findByEmail(String email) {
+        return employeesDAO.findByEmail(email).orElseThrow(() -> new NotFoundException("Utente con mail " + email + " non trovato."));
     }
 
 }

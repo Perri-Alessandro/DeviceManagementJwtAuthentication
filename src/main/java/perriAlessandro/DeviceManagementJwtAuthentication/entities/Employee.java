@@ -26,16 +26,18 @@ public class Employee {
     private String surname;
     private String email;
     private String imageUrl;
+    private String password;
     @OneToMany(mappedBy = "employee")
     @JsonManagedReference
     private List<Device> deviceList;
 
-    public Employee(String username, String name, String surname, String email, String imageUrl) {
+    public Employee(String username, String name, String surname, String email, String imageUrl, String password) {
         this.username = username;
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.imageUrl = imageUrl;
+        this.password = password;
     }
 
     public void setDefaultImageUrl(String imageUrl) {
