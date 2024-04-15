@@ -62,6 +62,9 @@ public class EmployeeController {
 
     @PatchMapping("/{employeeId}/update")
     public String updateImage(@PathVariable UUID employeeId, @RequestParam("imageUrl") MultipartFile image) throws IOException {
+//        if (image.isEmpty() || !image.getContentType().startsWith("multipart")) {
+//            throw new BadRequestException("La richiesta deve essere di tipo multipart e contenere un'immagine.");
+//        }
         return this.employeeService.updateImage(employeeId, image);
     }
 
