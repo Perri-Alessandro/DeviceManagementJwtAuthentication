@@ -37,14 +37,14 @@ public class ExceptionsHandler {
 
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND) // 404
-    public ErrorsPayload handleNotFound(NotFoundException ex) {
-        return new ErrorsPayload(ex.getMessage(), LocalDateTime.now());
+    public ErrorsResponseDTO handleNotFound(NotFoundException ex) {
+        return new ErrorsResponseDTO(ex.getMessage(), LocalDateTime.now());
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR) // 500
-    public ErrorsPayload handleGenericErrors(Exception ex) {
+    public ErrorsResponseDTO handleGenericErrors(Exception ex) {
         ex.printStackTrace();
-        return new ErrorsPayload("Problema lato server! Giuro che lo risolveremo presto!", LocalDateTime.now());
+        return new ErrorsResponseDTO("Problema lato server! Giuro che lo risolveremo presto!", LocalDateTime.now());
     }
 }
