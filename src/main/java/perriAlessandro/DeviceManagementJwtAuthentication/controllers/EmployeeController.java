@@ -57,14 +57,14 @@ public class EmployeeController {
 
     // GET .../employees/{employID}
     @GetMapping("/{employID}")
-    private Employee findBlogById(@PathVariable UUID employID) {
+    public Employee findBlogById(@PathVariable UUID employID) {
         return employeeService.findById(employID);
     }
 
     // PUT .../employees/{employID} (+ body)
     @PutMapping("/{employID}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    private Employee findBlogByIdAndUpdate(@PathVariable UUID employID, @RequestBody Employee body) {
+    public Employee findBlogByIdAndUpdate(@PathVariable UUID employID, @RequestBody Employee body) {
         return employeeService.findByIdAndUpdate(employID, body); // return this. ???
     }
 
@@ -72,7 +72,7 @@ public class EmployeeController {
     @DeleteMapping("/{employID}")
     @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    private void findByDeviceIdAndDelete(@PathVariable UUID employID) {
+    public void findByDeviceIdAndDelete(@PathVariable UUID employID) {
         employeeService.findByIdAndDelete(employID);
     }
 

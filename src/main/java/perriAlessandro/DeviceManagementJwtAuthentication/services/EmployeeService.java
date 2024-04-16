@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import perriAlessandro.DeviceManagementJwtAuthentication.entities.Employee;
@@ -28,6 +29,9 @@ public class EmployeeService {
     private DevicesDAO devicesDAO;
 
     @Autowired
+    private PasswordEncoder bcrypt;
+
+    @Autowired
     private Cloudinary cloudinaryUploader;
 
     public Page<Employee> getEmployeesList(int page, int size, String sortBy) {
@@ -40,7 +44,7 @@ public class EmployeeService {
         if (employeesDAO.findByEmail(body.email()).isPresent()) {
             throw new BadRequestException("L'email " + body.email() + " è già in uso!");
         }
-        Employee newUser = new Employee(body.username(), body.name(), body.surname(), body.email(), body.password(),
+        Employee newUser = new Employee(body.username(), body.name(), body.surname(), body.email(), bcrypt.encode(body.password()),
                 "https://ui-avatars.com/api/?name=" + body.name() + "+" + body.surname());
 
         // 4. Salvo lo user
