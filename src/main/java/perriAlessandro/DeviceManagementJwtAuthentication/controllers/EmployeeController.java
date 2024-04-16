@@ -1,8 +1,9 @@
 package perriAlessandro.DeviceManagementJwtAuthentication.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -24,12 +25,25 @@ public class EmployeeController {
 
 
     // GET .../employees
-    @GetMapping
-    public Page<Employee> getAllDevice(@RequestParam(defaultValue = "0") int page,
-                                       @RequestParam(defaultValue = "10") int size,
-                                       @RequestParam(defaultValue = "id") String sortBy) {
-        return this.employeeService.getEmployeesList(page, size, sortBy);
+    @GetMapping("/me")
+    public Employee getProfile(@AuthenticationPrincipal Employee currentAuthenticatedUser) {
+        // @AuthenticationPrincipal mi consente di accedere all'utente attualmente autenticato
+        // Questa cosa è resa possibile dal fatto che precedentemente a questo endpoint (ovvero nel JWTFilter)
+        // ho estratto l'id dal token e sono andato nel db per cercare l'utente ed "associarlo" a questa richiesta
+        return currentAuthenticatedUser;
     }
+
+    @PutMapping("/me")
+    public Employee updateProfile(@AuthenticationPrincipal Employee currentAuthenticatedUser, @RequestBody Employee updatedUser) {
+        return this.employeeService.findByIdAndUpdate(currentAuthenticatedUser.getId(), updatedUser);
+    }
+
+    @DeleteMapping("/me")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteProfile(@AuthenticationPrincipal Employee currentAuthenticatedUser) {
+        this.employeeService.findByIdAndDelete(currentAuthenticatedUser.getId());
+    }
+
 
     // POST .../employees (+ body)
     @PostMapping
@@ -49,12 +63,14 @@ public class EmployeeController {
 
     // PUT .../employees/{employID} (+ body)
     @PutMapping("/{employID}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     private Employee findBlogByIdAndUpdate(@PathVariable UUID employID, @RequestBody Employee body) {
-        return employeeService.findByIdAndUpdate(employID, body);
+        return employeeService.findByIdAndUpdate(employID, body); // return this. ???
     }
 
     // DELETE .../employees/{employID}
     @DeleteMapping("/{employID}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     private void findByDeviceIdAndDelete(@PathVariable UUID employID) {
         employeeService.findByIdAndDelete(employID);
